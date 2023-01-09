@@ -13,7 +13,7 @@ class ProductListCreateAPIView(ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     authentication_classes=[authentication.SessionAuthentication]
-    permission_classes=[permissions.D]
+    permission_classes=[permissions.DjangoModelPermissions]
 
     def perform_create(self, serializer):
         # serializer.save(user=self.request.user)
@@ -49,12 +49,12 @@ class ProductDelteAPIView(DestroyAPIView):
         super().perform_destroy(instance)
 
 
-class ProductMixinView(ListModelMixin, GenericAPIView):
-    queryset = Product.object.all()
-    serializer_class = ProductSerializer
+# class ProductMixinView(ListModelMixin, GenericAPIView):
+#     queryset = Product.object.all()
+#     serializer_class = ProductSerializer
 
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
+#     def get(self, request, *args, **kwargs):
+#         return self.list(request, *args, **kwargs)
 
 
 @api_view
