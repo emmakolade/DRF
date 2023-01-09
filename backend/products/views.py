@@ -1,9 +1,11 @@
-from rest_framework.generics import RetrieveAPIView, UpdateAPIView, DestroyAPIView, ListCreateAPIView
+from rest_framework.generics import RetrieveAPIView, UpdateAPIView, DestroyAPIView, ListCreateAPIView, GenericAPIView
+from rest_framework.mixins import ListModelMixin
 from .models import Product
 from .serializers import ProductSerializer
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework import permissions
 from django.shortcuts import get_object_or_404
 
 
@@ -36,7 +38,7 @@ class ProductUpdateAPIView(UpdateAPIView):
             instance.content = instance.title
             
 
-class ProductDelteAPIView(UpdateAPDestroyAPIViewIView):
+class ProductDelteAPIView(DestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = 'pk'
@@ -45,8 +47,12 @@ class ProductDelteAPIView(UpdateAPDestroyAPIViewIView):
         super().perform_destroy(instance)
 
 
+class ProductMixinView(ListModelMixin, GenericAPIView):
+    queryset = Product.object.all()
+    serializer_class = ProductSerializer
 
-
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
 
 @api_view
